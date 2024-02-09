@@ -63,7 +63,7 @@ class ClassAirCarbonylMQ9 extends ClassMiddleSensor {
         if (!this._UsedChannels.includes(_num_channel)) this._UsedChannels.push(_num_channel); //номер канала попадает в список опрашиваемых каналов. Если интервал уже запущен с таким же периодои, то даже нет нужды его перезапускать 
         if (!this._Interval) {          //если в данный момент не ведется ни одного опроса
             this._Interval = setInterval(() => {
-                if (this._UsedChannels.includes(0) && this._CanRead) this.Ch0_Value = this._Sensor.read('CH4');
+                if (this._UsedChannels.includes(0) && this._CanRead) this.Ch0_Value = this._Sensor.read('CO');
             }, period);
         }
     }
