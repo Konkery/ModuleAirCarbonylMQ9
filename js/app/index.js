@@ -7,7 +7,7 @@ let opts = {pins: [A0, P10], quantityChannel: 1};
 let sensor_props = {
     name: "MQ9",
     type: "sensor",
-    channelNames: ['methane'],
+    channelNames: ['carbonyl'],
     typeInSignal: "analog",
     typeOutSignal: "analog",
     quantityChannel: 1,
