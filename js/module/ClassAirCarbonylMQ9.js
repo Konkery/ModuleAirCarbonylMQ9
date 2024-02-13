@@ -1,4 +1,4 @@
-const ClassMiddleSensor = require('ClassSensorArchitecture');
+const ClassMiddleSensor = require('ClassSensor.min.js');
 /**
  * @class
  * Модуль реализует базовые функции датчика MQ-9,
@@ -12,7 +12,7 @@ class ClassAirCarbonylMQ9 extends ClassMiddleSensor {
     constructor(_opts, _sensor_props) {
         ClassMiddleSensor.apply(this, [_opts, _sensor_props]);
         this._Name = 'ClassAirCarbonylMQ9'; //переопределяем имя типа
-		this._Sensor = require('BaseClassMQX').connect({dataPin: _opts.pin1, heatPin: _opts.pin2, model: 'MQ9', r0: _opts.baseline});
+		this._Sensor = require('BaseClassMQX.min.js').connect({dataPin: _opts.pins[0], heatPin: _opts.pins[1], model: 'MQ9', r0: _opts.baseline});
         this._MinPeriod = 250;
         this._UsedChannels = [];
         this._Interval;
@@ -46,10 +46,21 @@ class ClassAirCarbonylMQ9 extends ClassMiddleSensor {
     Preheat()
     {
         this._CanRead = false;
+        console.log("Beginning to preheat MQ-9...");
         this._Sensor.preheat(() => {
             console.log("MQ-9 is heated!");
             this._CanRead = true;
         });
+    }
+    /**
+     * @method
+     * Запускает датчик на калибровку - определяет базовое значение
+     * концентрации угарного газа в воздухе
+     * @param {Number} _val   - Значение для калибровки, необязательный параметр
+     */
+    Calibrate(_val)
+    {
+        this._Sensor.calibrate(_val);
     }
     /**
      * @method
@@ -63,7 +74,7 @@ class ClassAirCarbonylMQ9 extends ClassMiddleSensor {
         if (!this._UsedChannels.includes(_num_channel)) this._UsedChannels.push(_num_channel); //номер канала попадает в список опрашиваемых каналов. Если интервал уже запущен с таким же периодои, то даже нет нужды его перезапускать 
         if (!this._Interval) {          //если в данный момент не ведется ни одного опроса
             this._Interval = setInterval(() => {
-                if (this._UsedChannels.includes(0) && this._CanRead) this.Ch0_Value = this._Sensor.read('CO');
+                if (this._UsedChannels.includes(0)) this.Ch0_Value = this._CanRead ? this._Sensor.read('CO') : 0;
             }, period);
         }
     }
