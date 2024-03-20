@@ -1,16 +1,15 @@
-const ClassMiddleSensor = require('ClassSensor.min.js');
 /**
  * @class
  * Модуль реализует базовые функции датчика MQ-9,
  * возращающего данные о концентрации угарного газа в воздухе
  */
-class ClassAirCarbonylMQ9 extends ClassMiddleSensor {
+class ClassAirCarbonylMQ9 extends ClassSensor {
     /**
      * @constructor
-     * @param {Object} _opts   - Объект с параметрами по нотации ClassMiddleSensor
+     * @param {Object} _opts   - Объект с параметрами по нотации ClassSensor
      */
     constructor(_opts, _sensor_props) {
-        ClassMiddleSensor.apply(this, [_opts, _sensor_props]);
+        ClassSensor.apply(this, [_opts, _sensor_props]);
         this._Name = 'ClassAirCarbonylMQ9'; //переопределяем имя типа
 		this._Sensor = require('BaseClassMQX.min.js').connect({dataPin: _opts.pins[0], heatPin: _opts.pins[1], model: 'MQ9', r0: _opts.baseline});
         this._MinPeriod = 250;
